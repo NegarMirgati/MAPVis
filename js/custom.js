@@ -1,7 +1,23 @@
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
-output.innerHTML = slider.value;
+var rangeSlider = function () {
+    var slider = $('.range-slider'),
+        range = $('.range-slider__range'),
+        value = $('.range-slider__value');
+    slider.each(function () {
 
-slider.oninput = function () {
-    output.innerHTML = this.value;
-}
+        value.each(function () {
+            var value = $(this).prev().attr('value');
+            $(this).html(value);
+        });
+
+        range.on('input', function () {
+            $(this).next(value).html(this.value);
+        });
+    });
+};
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    rangeSlider();
+}, false);

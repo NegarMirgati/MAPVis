@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.1/assets/img/favicons/favicon.ico">
+
+    <title>Sticky Footer Template for Bootstrap</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/sticky-footer/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/custom.css" rel="stylesheet">
+
+    <!-- Custom js -->
+    <script src="js/custom.js"></script>
+
+
+</head>
+
+<body>
+    <div class="container h-100"> MAP Visualizer
+        <div class="row h-100">
+            <div class="col-md-6 align-self-center" id="diagram">
+                <div class="d-flex justify-content-center">
+                    <div>
+                        some content <br>
+                        some diagram <br>
+                        blah blah <br>
+                    </div>
+                </div>
+            </div>
+            <div class="offset-md-2  col-md-4 align-self-center" id="setting">
+                <div class="row mb-4" id="settings_box_header">
+                    <div class="col align-self-center">
+                        <h3>Adjust Parameters</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-1">
+                        <h4>P</h4>
+                        <input type="range" min="0" max="100" value="50" class="slider" id="p_range">
+                        <p>Value: <span id="p"></span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-5">
+                        <h4>SNR</h4>
+                        <input type="range" min="0" max="100" value="50" class="slider" id="snr_range">
+                        <p>Value: <span id="snr"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var slider = document.getElementById("p_range");
+        var output = document.getElementById("p");
+        output.innerHTML = slider.value;
+
+        slider.oninput = function () {
+            output.innerHTML = this.value;
+        }
+
+        var slider1 = document.getElementById("snr_range");
+        var output1 = document.getElementById("snr");
+        output1.innerHTML = slider.value;
+
+        slider1.oninput = function () {
+            output1.innerHTML = this.value;
+        }
+    </script>
+
+</body>
+
+</html>

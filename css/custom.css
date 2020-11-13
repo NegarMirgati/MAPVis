@@ -38,3 +38,20 @@ body, html {
 #diag_img{
     width: 70%;
 }
+
+label {
+    font-size: 20px;
+    font-weight: 700;
+    margin-right: 7px;
+}
+
+input {
+    width: 30%;
+    height: 28px;
+    padding: 4px 10px;
+    border: 1px solid #666;
+    border-radius: 10px;
+    background: #cce6ff;
+    color: #1c87c9;
+    font-size: 16px;
+  }

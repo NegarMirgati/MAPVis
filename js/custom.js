@@ -18,6 +18,7 @@ var rangeSlider = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     rangeSlider();
+    updateDiagram();
 }, false);
 
 
@@ -44,4 +45,15 @@ var calcPErr = function (P_err_x0, P_err_x1) {
     P_err = (P_err_x0 * P_x0 + P_err_x1 * P_x1).toFixed(4)
     console.log("sssss", P_err)
     return P_err
+}
+
+// calulates P(signal) = P(x=0) * (Voltage_x0)^2 + P(x=1) * (Voltage_x1)^2
+var calcSignalPower = function () {
+    var P_x0 = document.getElementById('p').value / 100
+    var P_x1 = 1 - P_x0
+    var voltage_x0 = document.getElementById('voltage_0').value
+    var voltage_x1 = document.getElementById('voltage_1').value
+    power = Math.pow(voltage_x0, 2) * P_x0 + Math.pow(voltage_x1, 2) * P_x1
+    return power
+
 }

@@ -88,7 +88,15 @@ var updateDiagram = function () {
     data.addRows(chartData);
     data.addRows(chartData2);
 
-    options = { width: 500, legend: 'none' };
+    options = {
+        legend: 'none'
+        // chartArea: {
+        //     left: 40,
+        //     width: '100%'
+        // },
+
+        // width: '100%'
+    };
 
 
     options.hAxis = {};
@@ -126,4 +134,7 @@ var calcSignalPower = function () {
 
 }
 
+$(window).resize(function () {
+    updateDiagram()
+});
 

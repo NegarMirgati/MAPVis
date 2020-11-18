@@ -38,7 +38,8 @@
 <body class="chart">
     <div class="container h-100">
         <div class="row h-100">
-            <div class="col-md-6 mx-5 mb-2  justify-content-center align-self-center" id="diagram">
+            <!-- Diagram Col -->
+            <div class="col-md-6 mx-4 mb-2  justify-content-center align-self-center" id="diagram">
                 <div class="row justify-content-center">
                     <h3 id=" diagram-header">MAP Diagram</h3>
                 </div>
@@ -64,9 +65,9 @@
                     <p id="err_value"></p>
                     </p>
                 </div>
-
             </div>
-            <div class=" offset-md-2 mx-4 col-md-4 align-self-center" id="setting">
+            <!-- Paramaters Col -->
+            <div class=" offset-md-2 mx-2 col-md-4 align-self-center" id="setting">
                 <div class="row mb-4" id="settings_box_header">
                     <div class="col align-self-center">
                         <h3>Adjust Parameters</h3>
@@ -95,7 +96,8 @@
                 </div>
                 <div class="row mb-3 ml-1">
                     <label for="voltage_0">voltage level for 0:</label>
-                    <input type="number" id="voltage_0" name="voltage_0" value=0 onChange="updateDiagram()">
+                    <input type="number" id="voltage_0" disabled=True name="voltage_0" value=0
+                        onChange="updateDiagram()">
                 </div>
                 <div class="row mb-3 ml-1">
                     <label for="voltage_1">voltage level for 1:</label>

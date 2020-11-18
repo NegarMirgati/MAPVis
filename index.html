@@ -77,7 +77,7 @@
                     <div class="col mb-1">
                         <h4>P(X=0)</h4>
                         <div class="range-slider">
-                            <input class="range-slider__range" id="p" type="range" onChange="updateDiagram()" value="0"
+                            <input class="range-slider__range" id="p" type="range" onChange="updateDiagram()" value="0.5"
                                 min="0.0" max="1.0" step="0.1">
                             <span class="range-slider__value">0</span>
                         </div>
@@ -85,10 +85,10 @@
                 </div>
                 <div class="row">
                     <div class="col mb-5">
-                        <h4>SNR</h4>
+                        <h4><span>Noise &#963;</span></h4>
                         <div class="range-slider">
-                            <input class="range-slider__range" id="snr" type="range" onChange="updateDiagram()"
-                                value="0" min="0" max="20">
+                            <input class="range-slider__range" id="sigma" type="range" onChange="updateDiagram()"
+                                value="1" min="1" max="10" step="0.1">
                             <span class="range-slider__value">0</span>
                         </div>
 
@@ -96,12 +96,15 @@
                 </div>
                 <div class="row mb-3 ml-1">
                     <label for="voltage_0">voltage level for 0:</label>
-                    <input type="number" id="voltage_0" disabled=True name="voltage_0" value=0
-                        onChange="updateDiagram()">
+                    <input type="number" id="voltage_0" name="voltage_0" value=0 onChange="updateDiagram()">
                 </div>
                 <div class="row mb-3 ml-1">
                     <label for="voltage_1">voltage level for 1:</label>
                     <input type="number" id="voltage_1" name="voltage_1" , value=1 onChange="updateDiagram()">
+                </div>
+                <div class="row mb-3 ml-1">
+                    <label for="snr">SNR:</label>
+                    <p id="snr_calculated"></p>
                 </div>
             </div>
         </div>

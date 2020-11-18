@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script src="https://www.google.com/jsapi?ext.js"></script>
 <html lang="en">
 
 <head>
@@ -31,16 +35,16 @@
 
 </head>
 
-<body>
+<body class="chart">
     <div class="container h-100">
         <div class="row h-100">
             <div class="col-md-6 mx-5 mb-2  justify-content-center align-self-center" id="diagram">
                 <div class="row justify-content-center">
                     <h3 id=" diagram-header">MAP Diagram</h3>
                 </div>
-                <!-- #TODO : Replace this with a real diagram! -->
-                <div class="row mb-2 justify-content-center">
-                    <img class="mx-auto d-block" id="diag_img" src="assets/images/normal.jpg" alt="diagram">
+                <!-- Live Diagram -->
+                <div class="row mt-3 justify-content-center">
+                    <div id="chart_div"></div>
                 </div>
                 <!-- #TODO : Calculate real value! -->
                 <div class="row mt-3 justify-content-center">
@@ -72,8 +76,8 @@
                     <div class="col mb-1">
                         <h4>P(X=0)</h4>
                         <div class="range-slider">
-                            <input class="range-slider__range" id="p" type="range" onChange="updateDiagram()" value="50"
-                                min="0" max="100">
+                            <input class="range-slider__range" id="p" type="range" onChange="updateDiagram()" value="0"
+                                min="0.0" max="1.0" step="0.1">
                             <span class="range-slider__value">0</span>
                         </div>
                     </div>
@@ -83,7 +87,7 @@
                         <h4>SNR</h4>
                         <div class="range-slider">
                             <input class="range-slider__range" id="snr" type="range" onChange="updateDiagram()"
-                                value="50" min="0" max="100">
+                                value="0" min="0" max="20">
                             <span class="range-slider__value">0</span>
                         </div>
 

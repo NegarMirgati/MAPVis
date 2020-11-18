@@ -59,7 +59,7 @@ var updateDiagram = function () {
 
   document.getElementById("err_x0_value").innerText = p_value;
   document.getElementById("err_x1_value").innerText = sigma_value;
-  document.getElementById("snr_calculated").innerText = getSNR();
+  document.getElementById("snr_calculated").innerText = getSNR().toFixed(4);
 
   var voltage_x0 = parseInt(document.getElementById("voltage_0").value);
   var voltage_x1 = parseInt(document.getElementById("voltage_1").value);
@@ -94,6 +94,17 @@ google.load("visualization", "1", {
   packages: ["corechart"],
   callback: updateDiagram,
 });
+
+var calcPErrorZero = function () {
+  var voltage_x0 = parseInt(document.getElementById("voltage_0").value);
+  var voltage_x1 = parseInt(document.getElementById("voltage_1").value);
+  intersection_point = (voltage_x0 + voltage_x1) / 2;
+  return 1;
+};
+
+var calcPErrorOne = function () {
+  return 1;
+};
 
 // calculate P(error) = P(error|X=0)P(X=0) + P(error|X=1)P(X=1) rounded to 4 digits
 var calcPErr = function (P_err_x0, P_err_x1) {

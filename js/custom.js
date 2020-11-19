@@ -23,15 +23,7 @@ document.addEventListener(
   false
 );
 
-function NormalDensityZx(x, Mean, StdDev) {
-  var a = x - Mean;
-  return (
-    Math.exp(-(a * a) / (2 * StdDev * StdDev)) /
-    (Math.sqrt(2 * Math.PI) * StdDev)
-  );
-}
-
-var getChartData = function (Mean, StdDev, p_value) {
+var getChartData = function (Mean, StdDev, p_value, intersection, flag) {
   var chartData = new Array([]);
   chartData.push();
   var index = 0;
@@ -39,55 +31,89 @@ var getChartData = function (Mean, StdDev, p_value) {
   lower_bound = Math.floor(Mean - 3 * StdDev);
   upper_bound = Math.floor(Mean + 3 * StdDev);
 
-  for (var i = lower_bound; i < upper_bound; i += 0.1) {
-    chartData[index] = new Array(2);
+  for (var i = lower_bound; i < upper_bound; i += 0.05) {
+    chartData[index] = new Array(4);
 
     chartData[index][0] = i;
+    console.log("p mean dev", p_value, Mean, StdDev);
+    chartData[index][1] = p_value * jStat.normal.pdf(i, Mean, StdDev);
 
-    chartData[index][1] = (p_value / 0.4) * NormalDensityZx(i, Mean, StdDev);
+    if (
+      (i > intersection && flag != true) ||
+      (i < intersection && flag == true)
+    ) {
+      chartData[index][2] = false;
+    }
+
+    chartData[index][3] =
+      "opacity: 1; + color: #4EA2F1; + stroke-color: #00F603; ";
 
     index++;
   }
   return chartData;
 };
 
+function setChartOptions() {
+  options = { legend: "none", backgroundColor: "transparent" };
+  options.hAxis = {};
+  options.hAxis.minorGridlines = {};
+  options.hAxis.minorGridlines.count = 12;
+
+  return options;
+}
+
+function addColumns() {
+  data.addColumn("number", "X Value");
+  data.addColumn("number", "Y Value");
+  data.addColumn({ type: "boolean", role: "scope" });
+  data.addColumn({ type: "string", role: "style" });
+}
+
+function prepareChart(rows1, rows2) {
+  data = new google.visualization.DataTable();
+
+  setChartOptions();
+  addColumns();
+
+  data.addRows(chart1_data);
+  data.addRows(chart2_data);
+
+  drawChart(data);
+}
+
+function drawChart(data) {
+  chart = new google.visualization.AreaChart(
+    document.getElementById("chart_div")
+  );
+  chart.draw(data, options);
+}
+
 // This function updates diagram and P(err) values whenever any slider value changes
 var updateDiagram = function () {
-  console.log("update called!");
-  var p_value = document.getElementById("p").value;
-  var sigma_value = parseInt(document.getElementById("sigma").value);
+  var p_0_value = parseFloat(document.getElementById("p").value);
+  var p_1_value = 1 - p_0_value;
+  var sigma_value = parseFloat(document.getElementById("sigma").value);
+  console.log("sigmaaaaa", sigma_value);
 
-  document.getElementById("err_x0_value").innerText = p_value;
-  document.getElementById("err_x1_value").innerText = sigma_value;
   document.getElementById("snr_calculated").innerText = getSNR().toFixed(4);
 
   var voltage_x0 = parseInt(document.getElementById("voltage_0").value);
   var voltage_x1 = parseInt(document.getElementById("voltage_1").value);
 
-  document.getElementById("err_value").innerText = calcPErr(0.1, 0.2);
+  //   document.getElementById("err_value").innerText = calcPErr(0.1, 0.2);
+  flag = voltage_x1 > voltage_x0;
+  intersection = getIntersection();
 
-  var data = new google.visualization.DataTable();
-
-  data.addColumn("number", "X Value");
-  data.addColumn("number", "Y Value");
-
-  chart1_data = getChartData(voltage_x0, sigma_value, p_value);
-  chart2_data = getChartData(voltage_x1, sigma_value, 1 - p_value);
-
-  data.addRows(chart1_data);
-  data.addRows(chart2_data);
-
-  options = {
-    legend: "none",
-  };
-
-  options.hAxis = {};
-  options.hAxis.minorGridlines = {};
-  options.hAxis.minorGridlines.count = 12;
-  var chart = new google.visualization.AreaChart(
-    document.getElementById("chart_div")
+  // prepare chart!
+  chart1_data = getChartData(0, sigma_value, p_0_value, intersection, !flag);
+  chart2_data = getChartData(
+    voltage_x1,
+    sigma_value,
+    p_1_value,
+    intersection,
+    flag
   );
-  chart.draw(data, options);
+  prepareChart(chart1_data, chart2_data);
 };
 
 google.load("visualization", "1", {
@@ -95,30 +121,39 @@ google.load("visualization", "1", {
   callback: updateDiagram,
 });
 
-var calcPErrorZero = function () {
-  var voltage_x0 = parseInt(document.getElementById("voltage_0").value);
+var getIntersection = function () {
+  var sigma = document.getElementById("sigma").value;
+  var P_x0 = document.getElementById("p").value;
+  var P_x1 = 1 - P_x0;
+  console.log(P_x0, P_x1, sigma);
   var voltage_x1 = parseInt(document.getElementById("voltage_1").value);
-  intersection_point = (voltage_x0 + voltage_x1) / 2;
+  intersection_point =
+    voltage_x1 / 2 + (Math.pow(sigma, 2) / voltage_x1) * Math.log(P_x0 / P_x1);
+  console.log("interrrr", intersection_point);
+  return intersection_point;
+};
+
+var calcPErrorZero = function () {
+  // #TODO : calculate this
   return 1;
 };
 
 var calcPErrorOne = function () {
+  // #TODO : calculate this
   return 1;
 };
 
 // calculate P(error) = P(error|X=0)P(X=0) + P(error|X=1)P(X=1) rounded to 4 digits
 var calcPErr = function (P_err_x0, P_err_x1) {
-  var P_x0 = document.getElementById("p").value / 100;
+  var P_x0 = document.getElementById("p").value;
   var P_x1 = 1 - P_x0;
-  console.log(P_x0, P_x1);
   P_err = (P_err_x0 * P_x0 + P_err_x1 * P_x1).toFixed(4);
-  console.log("sssss", P_err);
   return P_err;
 };
 
 // calulates P(signal) = P(x=0) * (Voltage_x0)^2 + P(x=1) * (Voltage_x1)^2
 var calcSignalPower = function () {
-  var P_x0 = document.getElementById("p").value / 100;
+  var P_x0 = document.getElementById("p").value;
   var P_x1 = 1 - P_x0;
   var voltage_x0 = document.getElementById("voltage_0").value;
   var voltage_x1 = document.getElementById("voltage_1").value;

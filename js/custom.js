@@ -261,11 +261,11 @@ var calcPErr = function (P_err_x0, P_err_x1) {
   P_err = (P_err_x0 * P_x0 + P_err_x1 * P_x1).toFixed(4);
   text =
     "P(error) = " +
-    P_x0 +
+    parseFloat(P_x0.toFixed(4)) +
     " * " +
     parseFloat(p_err_0.toFixed(4)) +
     " + " +
-    P_x1 +
+    parseFloat(P_x1.toFixed(4)) +
     " * " +
     parseFloat(p_err_1.toFixed(4)) +
     " = " +

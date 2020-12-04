@@ -62,16 +62,20 @@ input {
 
 #display_int_0 {
   display: none;
+  overflow-x: scroll;
 }
 
 #display_int_0 {
   display: none;
+  overflow-x: scroll;
 }
 
 #display_int_1 {
   display: none;
+  overflow-x: scroll;
 }
 
 #display_2 {
   display: none;
+  overflow-x: scroll;
 }

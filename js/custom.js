@@ -71,7 +71,6 @@ var updateDiagram = function () {
   var p_0_value = get_p();
   var p_1_value = 1 - p_0_value;
   var sigma_value = get_sigma();
-  console.log("sigmaaaaa", sigma_value);
 
   document.getElementById("snr_calculated").innerText = getSNR().toFixed(4);
 
@@ -80,7 +79,7 @@ var updateDiagram = function () {
 
   // same x0, x1 values causes division by zero in get_intersection function so it is not allowed
   if (voltage_x0 == voltage_x1) {
-    alert("Choose different voltage levels for zero and 1");
+    alert("Choose different voltage levels for zero and one");
     return;
   }
 
@@ -135,7 +134,13 @@ var getIntersection = function () {
 };
 
 var calcPs = function () {
+  var mathDiv0 = document.getElementById("math_0");
+  var displayDiv0 = document.getElementById("display_int_0");
+  var mathDiv1 = document.getElementById("math_1");
+  var displayDiv1 = document.getElementById("display_int_1");
+
   intersection = getIntersection();
+  intersection_fixed = parseFloat(intersection.toFixed(4).toString());
   var P_x0 = get_p();
   var P_x1 = 1 - P_x0;
   var sigma = get_sigma();
@@ -148,35 +153,104 @@ var calcPs = function () {
   text_0 = "";
   text_1 = "";
 
+  //// AFTER INTERSECTION ////
   after_intersection = intersection + 0.05;
   bell_0_value = getPdf(after_intersection, voltage_x0, sigma, P_x0);
   bell_1_value = getPdf(after_intersection, voltage_x1, sigma, P_x1);
 
   if (bell_0_value < bell_1_value) {
     p_err_0 = 1 - jStat.normal.cdf(intersection, voltage_x0, sigma);
-    text_0 = "P(x > " + intersection.toFixed(4).toString() + ")";
+    text_0 = `P(error|x=0) = P(x > ${intersection_fixed}) = `;
+    MathJax.Hub.Queue(function () {
+      var math = MathJax.Hub.getAllJax("MathDiv")[0];
+      MathJax.Hub.Queue([
+        "Text",
+        math,
+        text_0 +
+          getIntegralText(
+            sigma,
+            voltage_x0,
+            intersection_fixed,
+            "\\infty",
+            p_err_0
+          ),
+      ]);
+      MathJax.Hub.Queue(function () {
+        displayDiv0.innerHTML = mathDiv0.innerHTML;
+      });
+    });
   } else {
     p_err_1 = 1 - jStat.normal.cdf(intersection, voltage_x1, sigma);
-    text_1 = "P(x > " + intersection.toFixed(4).toString() + ")";
+    text_1 = `P(error|x=1) = P(x > ${intersection_fixed}) = `;
+    MathJax.Hub.Queue(function () {
+      var math = MathJax.Hub.getAllJax("MathDiv")[1];
+      MathJax.Hub.Queue([
+        "Text",
+        math,
+        text_1 +
+          getIntegralText(
+            sigma,
+            voltage_x1,
+            intersection_fixed,
+            "\\infty",
+            p_err_1
+          ),
+      ]);
+      MathJax.Hub.Queue(function () {
+        displayDiv1.innerHTML = mathDiv1.innerHTML;
+      });
+    });
   }
 
+  //// BEFORE INTERSECTION ////
   before_intersection = intersection - 0.1;
   bell_0_value = getPdf(before_intersection, voltage_x0, sigma, P_x0);
   bell_1_value = getPdf(before_intersection, voltage_x1, sigma, P_x1);
 
   if (bell_0_value < bell_1_value) {
     p_err_0 += jStat.normal.cdf(intersection, voltage_x0, sigma);
-    text_0 = "P(x < " + intersection.toFixed(4).toString() + ")";
+    text_0 = `P(error|x=0) = P(x < ${intersection_fixed}) = `;
+    MathJax.Hub.Queue(function () {
+      var math = MathJax.Hub.getAllJax("MathDiv")[0];
+      MathJax.Hub.Queue([
+        "Text",
+        math,
+        text_0 +
+          getIntegralText(
+            sigma,
+            voltage_x0,
+            "-\\infty",
+            intersection_fixed,
+            p_err_0
+          ),
+      ]);
+      MathJax.Hub.Queue(function () {
+        displayDiv0.innerHTML = mathDiv0.innerHTML;
+      });
+    });
   } else {
     p_err_1 += jStat.normal.cdf(intersection, voltage_x1, sigma);
-    text_1 = "P(x < " + intersection.toFixed(4).toString() + ")";
+    text_1 = ` P(error|x=1) = P(x < ${intersection_fixed}) = `;
+
+    MathJax.Hub.Queue(function () {
+      var math = MathJax.Hub.getAllJax("MathDiv")[1];
+      MathJax.Hub.Queue([
+        "Text",
+        math,
+        text_1 +
+          getIntegralText(
+            sigma,
+            voltage_x1,
+            "-\\infty",
+            intersection_fixed,
+            p_err_1
+          ),
+      ]);
+      MathJax.Hub.Queue(function () {
+        displayDiv1.innerHTML = mathDiv1.innerHTML;
+      });
+    });
   }
-
-  document.getElementById("err_x0_value").innerText =
-    text_0 + " = " + p_err_0.toFixed(4).toString();
-  document.getElementById("err_x1_value").innerText =
-    text_1 + " = " + p_err_1.toFixed(4).toString();
-
   calcPErr(p_err_0, p_err_1);
 };
 
@@ -185,7 +259,27 @@ var calcPErr = function (P_err_x0, P_err_x1) {
   var P_x0 = get_p();
   var P_x1 = 1 - P_x0;
   P_err = (P_err_x0 * P_x0 + P_err_x1 * P_x1).toFixed(4);
-  document.getElementById("err_value").innerText = P_err;
+  text =
+    "P(error) = " +
+    P_x0 +
+    " * " +
+    parseFloat(p_err_0.toFixed(4)) +
+    " + " +
+    P_x1 +
+    " * " +
+    parseFloat(p_err_1.toFixed(4)) +
+    " = " +
+    P_err;
+  var mathDiv2 = document.getElementById("math_2");
+  var displayDiv2 = document.getElementById("display_2");
+
+  MathJax.Hub.Queue(function () {
+    var math = MathJax.Hub.getAllJax("MathDiv")[2];
+    MathJax.Hub.Queue(["Text", math, text]);
+    MathJax.Hub.Queue(function () {
+      displayDiv2.innerHTML = mathDiv2.innerHTML;
+    });
+  });
   return P_err;
 };
 
@@ -208,6 +302,36 @@ var getSNR = function () {
   signal_power = calcSignalPower();
   noise_power = calcNoisePower();
   return signal_power / noise_power;
+};
+
+var getIntegralText = function (sigma, mean, lower, upper, p_val) {
+  if (mean < 0) {
+    sign = "+";
+    mean = mean * -1;
+  } else sign = "-";
+
+  if (lower == Number.POSITIVE_INFINITY) lower = "\\infty";
+  if (upper == Number.POSITIVE_INFINITY) upper = "\\infty";
+
+  if (lower == Number.NEGATIVE_INFINITY) lower = "- \\infty";
+  if (upper == Number.NEGATIVE_INFINITY) upper = "- \\infty";
+
+  return (
+    " \\dfrac{1}{{\\sqrt{2 \\pi * { " +
+    parseFloat((sigma * sigma).toFixed(2)) +
+    "}}}} \\int^{ " +
+    upper +
+    "}_{" +
+    lower +
+    "} e^{ - (x" +
+    sign +
+    "{" +
+    mean +
+    "})/{" +
+    parseFloat((2 * sigma * sigma).toFixed(2)) +
+    "}} dx = " +
+    parseFloat(p_val.toFixed(4))
+  );
 };
 
 /// getter functions (voltage_x0, voltage_x1, sigma, p)
@@ -256,6 +380,7 @@ var rangeSlider = function () {
 document.addEventListener(
   "DOMContentLoaded",
   function () {
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, "math"]);
     rangeSlider();
     updateDiagram();
   },

@@ -1,61 +1,77 @@
-body, html {
-    height: 100%;
-    background-color: #F7F7F7;
-    font-family: 'Times New Roman', Times, serif;
+body,
+html {
+  height: 100%;
+  background-color: #f7f7f7;
+  font-family: "Times New Roman", Times, serif;
 }
 
-.col-md-4{
-    background-color: white;
+.col-md-4 {
+  background-color: white;
 }
 
-.col-md-6{
-    background-color: white;
-
+.col-md-6 {
+  background-color: white;
 }
 
-#setting{
-    border-style: dotted;
-    border-color: rgb(42, 129, 209);
-    border-width:5px; 
-    border-radius: 15px;
+#setting {
+  border-style: dotted;
+  border-color: rgb(42, 129, 209);
+  border-width: 5px;
+  border-radius: 15px;
 }
 
-#settings_box_header{
-    text-align: center;
+#settings_box_header {
+  text-align: center;
 }
 
-#diagram-header{
-    text-align: center;
+#diagram-header {
+  text-align: center;
 }
 
-#diagram{
-    border-style: dotted;
-    border-color: rgb(42, 129, 209);
-    border-width:5px; 
-    border-radius: 15px;
+#diagram {
+  border-style: dotted;
+  border-color: rgb(42, 129, 209);
+  border-width: 5px;
+  border-radius: 15px;
 }
 
-#diag_img{
-    width: 70%;
+#diag_img {
+  width: 70%;
 }
 
 label {
-    font-size: 20px;
-    font-weight: 700;
-    margin-right: 7px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-right: 7px;
 }
 
 input {
-    width: 30%;
-    height: 28px;
-    padding: 4px 10px;
-    border: 1px solid #666;
-    border-radius: 10px;
-    background: #cce6ff;
-    color: #1c87c9;
-    font-size: 16px;
+  width: 30%;
+  height: 28px;
+  padding: 4px 10px;
+  border: 1px solid #666;
+  border-radius: 10px;
+  background: #cce6ff;
+  color: #1c87c9;
+  font-size: 16px;
 }
 
-#chart_div{
-    width: 100%; 
+#chart_div {
+  width: 100%;
+}
+
+#display_int_0 {
+  display: none;
+}
+
+#display_int_0 {
+  display: none;
+}
+
+#display_int_1 {
+  display: none;
+}
+
+#display_2 {
+  display: none;
 }
